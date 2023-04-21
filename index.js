@@ -16,6 +16,6 @@ app.get("/api/users", (req, res) => {
 	res.json(users)
 })
 
-app.listen(3001, () => {
+app.listen(process.env.PORT || 3001, () => {
 	console.log("escuchando")
 })
