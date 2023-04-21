@@ -17,7 +17,7 @@ const credentials = {
 }
 
 app.get('/', (req, res) => {
-	res.send('hola desde tu primera ruta de la Api')
+	res.send('hola desde tu primera rutda de la Api')
 })
 
 app.get('/api/login', (req, res) => {
