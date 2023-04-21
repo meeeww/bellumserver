@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index.js"
+    "start": "node index.js"
   },
   "author": "Samus",
   "license": "ISC",
@@ -16,6 +16,5 @@
     "mysql": "^2.18.1",
     "nodemon": "^2.0.22"
   },
-  "devDependencies": {},
   "description": ""
 }
