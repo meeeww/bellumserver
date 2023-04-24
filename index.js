@@ -56,6 +56,7 @@ console.log(result)
 })
 
 app.listen(process.env.PORT || 3001, (req, res) => {
-	console.log(req.protocol + '://' + req.get('host') + req.originalUrl)
+	var host = req.get('host')
+	console.log(host)
 	console.log("escuchando")
 })
