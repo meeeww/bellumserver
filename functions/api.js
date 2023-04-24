@@ -3,10 +3,13 @@ const serverless = require('serverless-http');
 const mysql = require('mysql')
 const app = express();
 const router = express.Router();
+const cors = require('cors')
+
+app.use(cors())
 
 //Get all students
 router.get('/', (req, res) => {
-  res.send('App is running...');
+  res.send('App is corriendo...');
 });
 
 const db = mysql.createPool( {
@@ -39,8 +42,6 @@ router.get("/info", (req, res) => {
 })
 
 router.post('/enviarmensaje', (req, res) => {
-
-	console.log("hey")
 
 	const nombreContacto = req.body.nombreContacto
 	const apellidoContacto = req.body.apellidoContacto
