@@ -7,7 +7,7 @@ const cors = require('cors')
 
 app.use(cors())
 app.use(express.json())
-//Get all students
+
 router.get('/', (req, res) => {
 	res.send('App is corriendo...');
 });
@@ -58,18 +58,6 @@ router.post('/enviarmensaje', (req, res) => {
 		console.log(result)
 		res.status(200)
 	})
-
-	
-
-	// const sqlInsert = "INSERT INTO `contacto` (`id_contacto`, `nombre`, `apellido`, `email`, `asunto`, `mensaje`) VALUES (NULL, '0', '0', '0', '0', '0');"
-	// console.log(sqlInsert)
-	// db.query(sqlInsert, (err, result) => {
-	// 	return 200;
-	// })
-
-	
-
-
 })
 
 app.use('/.netlify/functions/api', router);
