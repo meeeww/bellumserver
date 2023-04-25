@@ -6,13 +6,13 @@ const router = express.Router();
 const cors = require('cors')
 
 app.use(cors())
-
+app.use(express.json())
 //Get all students
 router.get('/', (req, res) => {
-  res.send('App is corriendo...');
+	res.send('App is corriendo...');
 });
 
-const db = mysql.createPool( {
+const db = mysql.createPool({
 	host: '212.227.32.40',
 	user: 'root',
 	password: '8m!25i!17I',
@@ -22,7 +22,7 @@ const db = mysql.createPool( {
 let users = [
 	{
 		id: 1,
-		nombre: "Juan"
+		nombre: "Jusans"
 	}
 ]
 
@@ -33,7 +33,7 @@ router.get("/users", (req, res) => {
 router.get("/info", (req, res) => {
 	const sqlSelect = "SELECT * FROM contacto"
 	db.query(sqlSelect, (err, result) => {
-		if(err){
+		if (err) {
 			res.send("error")
 		} else {
 			res.send(result)
@@ -49,10 +49,17 @@ router.post('/enviarmensaje', (req, res) => {
 	const asuntoContacto = req.body.asuntoContacto
 	const mensajeContacto = req.body.mensajeContacto
 
+	console.log("hey")
+	console.log(nombreContacto, apellidoContacto, correoContacto, asuntoContacto, mensajeContacto)
+
 	const sqlInsert = "INSERT INTO `contacto` (`id_contacto`, `nombre`, `apellido`, `email`, `asunto`, `mensaje`) VALUES (NULL, ?, ?, ?, ?, ?);"
+	console.log(sqlInsert)
 	db.query(sqlInsert, [nombreContacto, apellidoContacto, correoContacto, asuntoContacto, mensajeContacto], (err, result) => {
-console.log(result)
+		console.log(result)
 	})
+
+
+
 })
 
 app.use('/.netlify/functions/api', router);
