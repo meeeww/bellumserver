@@ -56,8 +56,18 @@ router.post('/enviarmensaje', (req, res) => {
 	console.log(sqlInsert)
 	db.query(sqlInsert, [nombreContacto, apellidoContacto, correoContacto, asuntoContacto, mensajeContacto], (err, result) => {
 		console.log(result)
+		res.status(200)
 	})
 
+	
+
+	// const sqlInsert = "INSERT INTO `contacto` (`id_contacto`, `nombre`, `apellido`, `email`, `asunto`, `mensaje`) VALUES (NULL, '0', '0', '0', '0', '0');"
+	// console.log(sqlInsert)
+	// db.query(sqlInsert, (err, result) => {
+	// 	return 200;
+	// })
+
+	
 
 
 })
