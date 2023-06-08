@@ -14,8 +14,8 @@ router.get('/', (req, res) => {
 
 const db = mysql.createPool({
 	host: '212.227.32.40',
-	user: 'root',
-	password: '8m!25i!17I',
+	user: 'bellumweb',
+	password: 'j*CjZycl3DQdgr/n',
 	database: 'bellum'
 })
 
