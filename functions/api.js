@@ -8,26 +8,21 @@ const cors = require('cors')
 app.use(cors())
 app.use(express.json())
 
-router.get('/', (req, res) => {
+//https://bellumserver.netlify.app/.netlify/functions/api/ <- la ruta de postman y axios
+//para hacer un deploy (actualizar los scripts) hay que abrir la terminal y escribir npm run dev y darle enter cuando lo pida
+
+router.get('/', (req, res) => { //la app funciona
 	res.send('App is corriendo...');
 });
 
-const db = mysql.createPool({
+const db = mysql.createPool({ //crear la conexion a la base de datos
 	host: '212.227.32.40',
 	user: 'bellumweb',
 	password: 'j*CjZycl3DQdgr/n',
 	database: 'bellum'
 })
 
-let users = [
-	{
-		id: 1,
-		nombre: "Jusans"
-	}
-]
-
-function generate_token(length) {
-	//edit the token allowed characters
+function generate_token(length) { //generar token para la tabla de sesiones
 	var a = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".split("");
 	var b = [];
 	for (var i = 0; i < length; i++) {
@@ -37,22 +32,33 @@ function generate_token(length) {
 	return b.join("");
 }
 
-router.get("/users", (req, res) => {
-	res.json(users)
-})
-
-router.get("/info", (req, res) => {
-	const sqlSelect = "SELECT * FROM contacto"
+router.get("/usuarios", (req, res) => { //buscamos TODOS los usuarios
+	const sqlSelect = "SELECT * FROM usuarios"
 	db.query(sqlSelect, (err, result) => {
 		if (err) {
-			res.send("error")
+			res.send(err)
 		} else {
 			res.send(result)
 		}
 	})
 })
 
-router.post("/login", (req, res) => {//encriptar + sql injection + cliente envia contraseña encriptada (en el server vuelves a encriptar)
+router.get("/usuarios/:id", (req, res) => {//LAS QUERIES QUE REQUIERAN UN CAMPO INSERTADO POR EL USUARIO HAY QUE DEFINIRLAS CON EL SIMBOLO ? PARA EVITAR SQL INJECTIONS
+
+	const id = req.params.id
+
+	const sqlSelect = "SELECT * FROM `usuarios` WHERE id_usuario = ?"
+	db.query(sqlSelect, [id],(err, result) => {
+		if (err) {
+			res.send(sqlSelect + " " + id + " error: " + err)
+		} else {
+			res.send(result)
+		}
+	})
+})
+
+//hay que revisar la funcion de login
+router.post("/login", (req, res) => {//LAS QUERIES QUE REQUIERAN UN CAMPO INSERTADO POR EL USUARIO HAY QUE DEFINIRLAS CON EL SIMBOLO ? PARA EVITAR SQL INJECTIONS
 
 	const nombreInicio = req.body.nombreInicio
 	const contrasenaInicio = req.body.contrasenaInicio
@@ -79,7 +85,8 @@ router.post("/login", (req, res) => {//encriptar + sql injection + cliente envia
 	})
 })
 
-router.post("/checksession", (req, res) => {//encriptar + sql injection + cliente envia contraseña encriptada (en el server vuelves a encriptar)
+//hay que revisar esta función
+router.post("/checksession", (req, res) => {//LAS QUERIES QUE REQUIERAN UN CAMPO INSERTADO POR EL USUARIO HAY QUE DEFINIRLAS CON EL SIMBOLO ? PARA EVITAR SQL INJECTIONS
 
 	const token = req.body.token
 
@@ -93,20 +100,7 @@ router.post("/checksession", (req, res) => {//encriptar + sql injection + client
 	})
 })
 
-router.get("/persona/:idPersona", (req, res) => {
-
-	const idPersona = req.params.idPersona
-
-	const sqlSelect = "SELECT * FROM `cuentas` WHERE id_cuenta = " + idPersona
-	db.query(sqlSelect, (err, result) => {
-		if (err) {
-			res.send(sqlSelect + " " + idPersona + " error")
-		} else {
-			res.send(result)
-		}
-	})
-})
-
+//hay que revisar la función
 router.post('/enviarmensaje', (req, res) => {
 
 	const nombreContacto = req.body.nombreContacto
