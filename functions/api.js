@@ -129,6 +129,17 @@ router.post('/enviarmensaje', (req, res) => {
 	})
 })
 
+router.get("/historial", (req, res) => { //buscamos TODO el historial
+	const sqlSelect = "SELECT * FROM historial"
+	db.query(sqlSelect, (err, result) => {
+		if (err) {
+			res.send(err)
+		} else {
+			res.send(result)
+		}
+	})
+})
+
 router.post("/actualizarrango", (req, res) => {
 	const idCuenta = req.body.idCuenta
 	const division = req.body.division
@@ -138,6 +149,14 @@ router.post("/actualizarrango", (req, res) => {
 
 	const sqlInsert = "INSERT INTO `historial` (`id_cuenta`, `division`, `rango`, `lps`, `fecha`) VALUES (?, ?, ?, ?, ?)"
 	db.query(sqlInsert, [idCuenta, division, rango, lps, fecha], (err, result) => {
+		res.status(200)
+		res.end("Successfully inserted - 200")
+	})
+})
+
+router.delete("/fixRango", (req, res) => {
+	const sqlQuery = "DELETE S1 FROM historial AS S1 INNER JOIN historial AS S2 WHERE S1.id_cuenta = S2.id_cuenta AND S1.fecha = S2.fecha AND S1.id_historial > S2.id_historial"
+	db.query(sqlQuery, (err, result) => {
 		res.status(200)
 		res.end("Successfully inserted - 200")
 	})
