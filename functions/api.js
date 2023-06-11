@@ -154,7 +154,7 @@ router.post("/actualizarrango", (req, res) => {
 	})
 })
 
-router.delete("/fixRango", (req, res) => {
+router.delete("/fixrango", (req, res) => {
 	const sqlQuery = "DELETE S1 FROM historial AS S1 INNER JOIN historial AS S2 WHERE S1.id_cuenta = S2.id_cuenta AND S1.fecha = S2.fecha AND S1.id_historial > S2.id_historial"
 	db.query(sqlQuery, (err, result) => {
 		res.status(200)
