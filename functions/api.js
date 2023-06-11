@@ -48,9 +48,20 @@ router.get("/usuarios/:id", (req, res) => {//LAS QUERIES QUE REQUIERAN UN CAMPO 
 	const id = req.params.id
 
 	const sqlSelect = "SELECT * FROM `usuarios` WHERE id_usuario = ?"
-	db.query(sqlSelect, [id],(err, result) => {
+	db.query(sqlSelect, [id], (err, result) => {
 		if (err) {
 			res.send(sqlSelect + " " + id + " error: " + err)
+		} else {
+			res.send(result)
+		}
+	})
+})
+
+router.get("/cuentas", (req, res) => { //buscamos TODAS las cuentas
+	const sqlSelect = "SELECT * FROM cuentas"
+	db.query(sqlSelect, (err, result) => {
+		if (err) {
+			res.send(err)
 		} else {
 			res.send(result)
 		}
@@ -109,15 +120,26 @@ router.post('/enviarmensaje', (req, res) => {
 	const asuntoContacto = req.body.asuntoContacto
 	const mensajeContacto = req.body.mensajeContacto
 
-	console.log(req.body)
 	//console.log(nombreContacto, apellidoContacto, correoContacto, asuntoContacto, mensajeContacto)
 
 	const sqlInsert = "INSERT INTO `contacto` (`id_contacto`, `nombre`, `apellido`, `email`, `asunto`, `mensaje`) VALUES (NULL, ?, ?, ?, ?, ?);"
-	console.log(sqlInsert)
 	db.query(sqlInsert, [nombreContacto, apellidoContacto, correoContacto, asuntoContacto, mensajeContacto], (err, result) => {
-		console.log(result)
 		res.status(200)
-		db.end()
+		res.end("Successfully inserted - 200")
+	})
+})
+
+router.post("/actualizarrango", (req, res) => {
+	const idCuenta = req.body.idCuenta
+	const division = req.body.division
+	const rango = req.body.rango
+	const lps = req.body.lps
+	const fecha = req.body.fecha
+
+	const sqlInsert = "INSERT INTO `historial` (`id_cuenta`, `division`, `rango`, `lps`, `fecha`) VALUES (?, ?, ?, ?, ?)"
+	db.query(sqlInsert, [idCuenta, division, rango, lps, fecha], (err, result) => {
+		res.status(200)
+		res.end("Successfully inserted - 200")
 	})
 })
 
