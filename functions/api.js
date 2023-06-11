@@ -154,11 +154,24 @@ router.post("/actualizarrango", (req, res) => {
 	})
 })
 
+/*funciones que se ejecutan automaticamente*/
+
 router.delete("/fixrango", (req, res) => {
 	const sqlQuery = "DELETE S1 FROM historial AS S1 INNER JOIN historial AS S2 WHERE S1.id_cuenta = S2.id_cuenta AND S1.fecha = S2.fecha AND S1.id_historial > S2.id_historial"
 	db.query(sqlQuery, (err, result) => {
 		res.status(200)
 		res.end("Successfully inserted - 200")
+	})
+})
+
+router.put("/cambiarnombreinvocador", (req, res) => {
+	const id = req.body.idCuenta
+	const nombre = req.body.invocador
+
+	const sqlUpdate = "UPDATE `cuentas` SET `invocador` = ? WHERE `cuentas`.`id_cuenta` = ?"
+	db.query(sqlUpdate, [nombre, id], (err, result) => {
+		res.status(200)
+		res.end("Successfully updated " + nombre + " with ID " + id)
 	})
 })
 
