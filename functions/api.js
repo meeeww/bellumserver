@@ -91,17 +91,17 @@ router.post("/login", (req, res) => {//LAS QUERIES QUE REQUIERAN UN CAMPO INSERT
 	const agente = req.body.agente
 	const token = generate_token(128)
 
-	const sqlSelect = "SELECT * FROM `cuentas` WHERE nombreCuenta = ? AND contraCuenta = ?"
+	const sqlSelect = "SELECT * FROM `usuarios` WHERE nombre = ? AND contra = ?"
 	db.query(sqlSelect, [nombreInicio, contrasenaInicio], (err, result) => {
 		if (err) {
-			res.send(sqlSelect + " " + nombreInicio + " " + contrasenaInicio + " error")
+			res.send("error")//res.send(sqlSelect + " " + nombreInicio + " " + contrasenaInicio + " error")
 		} else {
-			const idUsuario = result[0]["id_cuenta"]
+			const idUsuario = result[0]["id_usuario"]
 
-			const sqlSelect = "INSERT INTO `sesiones` (`id_usuario`, `primeraSesion`, `ultimaSesion`, `dispositivo`, `token`) VALUES ('" + idUsuario + "', '" + fecha + "', '" + fecha + "', '" + agente + "', '" + token + "')"
+			const sqlSelect = "INSERT INTO `sesiones` (`id_usuario`, `primera_sesion`, `ultima_sesion`, `dispositivo`, `token`) VALUES ('" + idUsuario + "', '" + fecha + "', '" + fecha + "', '" + agente + "', '" + token + "')"
 			db.query(sqlSelect, [idUsuario, fecha, fecha, agente, token], (err, result) => {
 				if (err) {
-					res.send(sqlSelect + " " + nombreInicio + " " + contrasenaInicio + " error2")
+					res.send("error2")//res.send(sqlSelect + " " + nombreInicio + " " + contrasenaInicio + " error2")
 				} else {
 					res.send(token)
 				}
@@ -117,6 +117,19 @@ router.post("/checksession", (req, res) => {//LAS QUERIES QUE REQUIERAN UN CAMPO
 
 	const sqlSelect = "SELECT * FROM `sesiones` WHERE token = ?"
 	db.query(sqlSelect, [token], (err, result) => {
+		if (err) {
+			res.send(sqlSelect + " " + nombreInicio + " " + contrasenaInicio + " error")
+		} else {
+			res.send(result)
+		}
+	})
+})
+
+router.put("/updatesession", (req, res) => {
+	const token = req.body.token
+
+	const sqlSelect = "UPDATE sesiones SET ultima_sesion = ? WHERE token = ?"
+	db.query(sqlSelect, [fecha, token], (err, result) => {
 		if (err) {
 			res.send(sqlSelect + " " + nombreInicio + " " + contrasenaInicio + " error")
 		} else {
