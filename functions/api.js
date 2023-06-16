@@ -126,6 +126,8 @@ router.post("/checksession", (req, res) => {//LAS QUERIES QUE REQUIERAN UN CAMPO
 })
 
 router.put("/updatesession", (req, res) => {
+	
+	const fecha = req.body.fecha
 	const token = req.body.token
 
 	const sqlSelect = "UPDATE sesiones SET ultima_sesion = ? WHERE token = ?"
