@@ -43,6 +43,28 @@ router.get("/usuarios", (req, res) => { //buscamos TODOS los usuarios
 	})
 })
 
+router.get("/usuarios/clientes", (req, res) => { //buscamos los usuarios clientes
+	const sqlSelect = "SELECT * FROM usuarios WHERE permisos = 0"
+	db.query(sqlSelect, (err, result) => {
+		if (err) {
+			res.send(err)
+		} else {
+			res.send(result)
+		}
+	})
+})
+
+router.get("/usuarios/staff", (req, res) => { //buscamos los usuarios staff
+	const sqlSelect = "SELECT * FROM usuarios WHERE permisos != 0"
+	db.query(sqlSelect, (err, result) => {
+		if (err) {
+			res.send(err)
+		} else {
+			res.send(result)
+		}
+	})
+})
+
 router.get("/usuarios/id=:id", (req, res) => {//LAS QUERIES QUE REQUIERAN UN CAMPO INSERTADO POR EL USUARIO HAY QUE DEFINIRLAS CON EL SIMBOLO ? PARA EVITAR SQL INJECTIONS
 
 	const id = req.params.id
@@ -74,6 +96,20 @@ router.get("/usuarios/nombre=:nombre", (req, res) => {//LAS QUERIES QUE REQUIERA
 router.get("/cuentas", (req, res) => { //buscamos TODAS las cuentas
 	const sqlSelect = "SELECT * FROM cuentas"
 	db.query(sqlSelect, (err, result) => {
+		if (err) {
+			res.send(err)
+		} else {
+			res.send(result)
+		}
+	})
+})
+
+router.get("/cuentas=:id", (req, res) => { //buscamos TODAS las cuentas
+
+	const id = req.params.id
+
+	const sqlSelect = "SELECT * FROM cuentas WHERE id_usuario = ?"
+	db.query(sqlSelect, [id], (err, result) => {
 		if (err) {
 			res.send(err)
 		} else {
@@ -126,7 +162,7 @@ router.post("/checksession", (req, res) => {//LAS QUERIES QUE REQUIERAN UN CAMPO
 })
 
 router.put("/updatesession", (req, res) => {
-	
+
 	const fecha = req.body.fecha
 	const token = req.body.token
 
@@ -163,6 +199,62 @@ router.get("/historial", (req, res) => { //buscamos TODO el historial
 	db.query(sqlSelect, (err, result) => {
 		if (err) {
 			res.send(err)
+		} else {
+			res.send(result)
+		}
+	})
+})
+
+router.get("/historial=:id", (req, res) => { //buscamos TODO el historial de una persona
+
+	const id = req.params.id
+
+	const sqlSelect = "SELECT * FROM historial WHERE id_cuenta = ?"
+	db.query(sqlSelect, [id], (err, result) => {
+		if (err) {
+			res.send(sqlSelect + " error: " + err)
+		} else {
+			res.send(result)
+		}
+	})
+})
+
+router.get("/historial/inicial=:id", (req, res) => { //buscamos TODO el historial de una persona
+
+	const id = req.params.id
+
+	const sqlSelect = "SELECT * FROM `historial` WHERE id_cuenta = ? ORDER BY fecha ASC LIMIT 1"
+	db.query(sqlSelect, [id], (err, result) => {
+		if (err) {
+			res.send(sqlSelect + " error: " + err)
+		} else {
+			res.send(result)
+		}
+	})
+})
+
+router.get("/historial/actual=:id", (req, res) => { //buscamos TODO el historial de una persona
+
+	const id = req.params.id
+
+	const sqlSelect = "SELECT * FROM `historial` WHERE id_cuenta = ? ORDER BY fecha DESC LIMIT 1"
+	db.query(sqlSelect, [id], (err, result) => {
+		if (err) {
+			res.send(sqlSelect + " error: " + err)
+		} else {
+			res.send(result)
+		}
+	})
+})
+
+router.get("/historial/maximo=:id", (req, res) => { //buscamos TODO el historial de una persona
+
+	const id = req.params.id
+
+	const sqlSelect = "SELECT * FROM historial WHERE id_cuenta = ? ORDER BY CASE WHEN division = 'CHALLENGER' then 1 WHEN division = 'GRANDMASTER' then 2 WHEN division = 'MASTER' then 3 WHEN division = 'DIAMOND' then 4 WHEN division = 'PLATINUM' then 5 WHEN division = 'GOLD' then 6 WHEN division = 'SILVER' then 7 WHEN division = 'BRONZE' then 8 WHEN division = 'IRON' then 9 END ASC, CASE WHEN rango = 'I' then 1 WHEN rango = 'II' then 2 WHEN rango = 'III' then 3 WHEN rango = 'IV' then 4 END ASC, lps DESC LIMIT 1"
+	db.query(sqlSelect, [id], (err, result) => {
+		if (err) {
+			res.send(sqlSelect + " error: " + err)
 		} else {
 			res.send(result)
 		}
