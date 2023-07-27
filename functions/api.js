@@ -263,7 +263,7 @@ router.get("/coaching/clase=:id", (req, res) => { //buscamos la clase por su id
 
 	const id = req.params.id
 
-	const sqlSelect = "SELECT * FROM `coaching` WHERE id_sesion = ?"
+	const sqlSelect = "SELECT coaching.*, usuarios.nombre FROM `coaching` INNER JOIN usuarios ON coaching.id_coach = usuarios.id_usuario WHERE coaching.id_sesion = ?"
 	db.query(sqlSelect, [id], (err, result) => {
 		if (err) {
 			res.send(sqlSelect + " error: " + err)
@@ -277,7 +277,7 @@ router.get("/coaching/coach=:id", (req, res) => { //buscamos las clases de un co
 
 	const id = req.params.id
 
-	const sqlSelect = "SELECT * FROM `coaching` WHERE id_coach = ?"
+	const sqlSelect = "SELECT coaching.*, usuarios.nombre FROM `coaching` INNER JOIN usuarios ON coaching.id_coach = usuarios.id_usuario WHERE coaching.id_coach = ?"
 	db.query(sqlSelect, [id], (err, result) => {
 		if (err) {
 			res.send(sqlSelect + " error: " + err)
@@ -291,7 +291,7 @@ router.get("/coaching/usuario=:id", (req, res) => { //buscamos las clases de un 
 
 	const id = req.params.id
 
-	const sqlSelect = "SELECT * FROM `coaching` WHERE id_usuario = ?"
+	const sqlSelect = "SELECT coaching.*, usuarios.nombre FROM `coaching` INNER JOIN usuarios ON coaching.id_coach = usuarios.id_usuario WHERE coaching.id_usuario = ?"
 	db.query(sqlSelect, [id], (err, result) => {
 		if (err) {
 			res.send(sqlSelect + " error: " + err)
