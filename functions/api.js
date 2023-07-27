@@ -118,7 +118,6 @@ router.get("/cuentas=:id", (req, res) => { //buscamos TODAS las cuentas
 	})
 })
 
-//hay que revisar la funcion de login
 router.post("/login", (req, res) => {//LAS QUERIES QUE REQUIERAN UN CAMPO INSERTADO POR EL USUARIO HAY QUE DEFINIRLAS CON EL SIMBOLO ? PARA EVITAR SQL INJECTIONS
 
 	const nombreInicio = req.body.nombreInicio
@@ -146,7 +145,6 @@ router.post("/login", (req, res) => {//LAS QUERIES QUE REQUIERAN UN CAMPO INSERT
 	})
 })
 
-//hay que revisar esta función
 router.post("/checksession", (req, res) => {//LAS QUERIES QUE REQUIERAN UN CAMPO INSERTADO POR EL USUARIO HAY QUE DEFINIRLAS CON EL SIMBOLO ? PARA EVITAR SQL INJECTIONS
 
 	const token = req.body.token
@@ -176,7 +174,7 @@ router.put("/updatesession", (req, res) => {
 	})
 })
 
-//hay que revisar la función
+//!hay que revisar la función
 router.post('/enviarmensaje', (req, res) => {
 
 	const nombreContacto = req.body.nombreContacto
@@ -261,6 +259,50 @@ router.get("/historial/maximo=:id", (req, res) => { //buscamos TODO el historial
 	})
 })
 
+router.get("/coaching/clase=:id", (req, res) => { //buscamos la clase por su id
+
+	const id = req.params.id
+
+	const sqlSelect = "SELECT * FROM `coaching` WHERE id_sesion = ?"
+	db.query(sqlSelect, [id], (err, result) => {
+		if (err) {
+			res.send(sqlSelect + " error: " + err)
+		} else {
+			res.send(result)
+		}
+	})
+})
+
+router.get("/coaching/coach=:id", (req, res) => { //buscamos las clases de un coach
+
+	const id = req.params.id
+
+	const sqlSelect = "SELECT * FROM `coaching` WHERE id_coach = ?"
+	db.query(sqlSelect, [id], (err, result) => {
+		if (err) {
+			res.send(sqlSelect + " error: " + err)
+		} else {
+			res.send(result)
+		}
+	})
+})
+
+router.get("/coaching/usuario=:id", (req, res) => { //buscamos las clases de un jugador
+
+	const id = req.params.id
+
+	const sqlSelect = "SELECT * FROM `coaching` WHERE id_usuario = ?"
+	db.query(sqlSelect, [id], (err, result) => {
+		if (err) {
+			res.send(sqlSelect + " error: " + err)
+		} else {
+			res.send(result)
+		}
+	})
+})
+
+//!funciones que se ejecutan automaticamente
+
 router.post("/actualizarrango", (req, res) => {
 	const idCuenta = req.body.idCuenta
 	const division = req.body.division
@@ -274,8 +316,6 @@ router.post("/actualizarrango", (req, res) => {
 		res.end("Successfully inserted - 200")
 	})
 })
-
-/*funciones que se ejecutan automaticamente*/
 
 router.delete("/fixrango", (req, res) => {
 	const sqlQuery = "DELETE S1 FROM historial AS S1 INNER JOIN historial AS S2 WHERE S1.id_cuenta = S2.id_cuenta AND S1.fecha = S2.fecha AND S1.id_historial > S2.id_historial"
