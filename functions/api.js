@@ -249,7 +249,7 @@ router.get("/historial/maximo=:id", (req, res) => { //buscamos TODO el historial
 
 	const id = req.params.id
 
-	const sqlSelect = "SELECT * FROM historial WHERE id_cuenta = ? ORDER BY CASE WHEN division = 'CHALLENGER' then 1 WHEN division = 'GRANDMASTER' then 2 WHEN division = 'MASTER' then 3 WHEN division = 'DIAMOND' then 4 WHEN division = 'PLATINUM' then 5 WHEN division = 'GOLD' then 6 WHEN division = 'SILVER' then 7 WHEN division = 'BRONZE' then 8 WHEN division = 'IRON' then 9 END ASC, CASE WHEN rango = 'I' then 1 WHEN rango = 'II' then 2 WHEN rango = 'III' then 3 WHEN rango = 'IV' then 4 END ASC, lps DESC LIMIT 1"
+	const sqlSelect = "SELECT * FROM historial WHERE id_cuenta = ? ORDER BY CASE WHEN division = 'CHALLENGER' then 1 WHEN division = 'GRANDMASTER' then 2 WHEN division = 'MASTER' then 3 WHEN division = 'DIAMOND' then 4 WHEN division = 'EMERALD' then 5 WHEN division = 'PLATINUM' then 6 WHEN division = 'GOLD' then 7 WHEN division = 'SILVER' then 8 WHEN division = 'BRONZE' then 9 WHEN division = 'IRON' then 10 END ASC, CASE WHEN rango = 'I' then 1 WHEN rango = 'II' then 2 WHEN rango = 'III' then 3 WHEN rango = 'IV' then 4 END ASC, lps DESC LIMIT 1"
 	db.query(sqlSelect, [id], (err, result) => {
 		if (err) {
 			res.send(sqlSelect + " error: " + err)
