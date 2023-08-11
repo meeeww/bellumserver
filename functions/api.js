@@ -65,6 +65,17 @@ router.get("/usuarios/staff", (req, res) => { //buscamos los usuarios staff
 	})
 })
 
+router.get("/usuarios/coaches", (req, res) => { //buscamos los usuarios coach
+	const sqlSelect = "SELECT * FROM usuarios WHERE permisos IN(2, 4)"
+	db.query(sqlSelect, (err, result) => {
+		if (err) {
+			res.send(err)
+		} else {
+			res.send(result)
+		}
+	})
+})
+
 router.get("/usuarios/id=:id", (req, res) => {//LAS QUERIES QUE REQUIERAN UN CAMPO INSERTADO POR EL USUARIO HAY QUE DEFINIRLAS CON EL SIMBOLO ? PARA EVITAR SQL INJECTIONS
 
 	const id = req.params.id
