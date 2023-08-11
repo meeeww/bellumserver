@@ -330,13 +330,19 @@ router.get("/coaching/usuario=:id", (req, res) => { //buscamos las clases de un 
 router.post("/coaching/crear", (req, res) => {
 	const idCliente = req.body.idCliente
 	const idCoach = req.body.idCoach
-	const hora = req.body.hora
 	const fecha = req.body.fecha
+	const hora = req.body.hora
 
 	const sqlInsert = "INSERT INTO `coaching` (`id_sesion`, `id_usuario`, `id_coach`, `fecha`, `hora`) VALUES (NULL, ?, ?, ?, ?)"
-	db.query(sqlInsert, [idCliente, idCoach, hora, fecha], (err, result) => {
-		res.status(200)
-		res.end("Successfully inserted - 200")
+	db.query(sqlInsert, [idCliente, idCoach, fecha, hora], (err, result) => {
+
+		if (!err) {
+			res.status(200)
+			res.end("Successfully inserted - 200")
+		} else {
+			res.status(401)
+			res.end(err)
+		}
 	})
 })
 
