@@ -327,6 +327,34 @@ router.get("/coaching/usuario=:id", (req, res) => { //buscamos las clases de un 
 	})
 })
 
+router.get("/coaching/pendientes/usuario=:id", (req, res) => { //buscamos las clases pendientes de un jugador
+
+	const id = req.params.id
+
+	const sqlSelect = "SELECT coaching.*, usuarios.nombre FROM `coaching` INNER JOIN usuarios ON coaching.id_coach = usuarios.id_usuario WHERE coaching.id_usuario = 2 AND fecha >= CURDATE() ORDER BY fecha ASC"
+	db.query(sqlSelect, [id], (err, result) => {
+		if (err) {
+			res.send(sqlSelect + " error: " + err)
+		} else {
+			res.send(result)
+		}
+	})
+})
+
+router.get("/coaching/completadas/usuario=:id", (req, res) => { //buscamos las clases completadas de un jugador
+
+	const id = req.params.id
+
+	const sqlSelect = "SELECT coaching.*, usuarios.nombre FROM `coaching` INNER JOIN usuarios ON coaching.id_coach = usuarios.id_usuario WHERE coaching.id_usuario = 2 AND fecha < CURDATE() AND hora < CURRENT_TIME() ORDER BY fecha DESC"
+	db.query(sqlSelect, [id], (err, result) => {
+		if (err) {
+			res.send(sqlSelect + " error: " + err)
+		} else {
+			res.send(result)
+		}
+	})
+})
+
 router.post("/coaching/crear", (req, res) => {
 	const idCliente = req.body.idCliente
 	const idCoach = req.body.idCoach
