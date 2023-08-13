@@ -341,6 +341,20 @@ router.get("/coaching/pendientes/usuario=:id", (req, res) => { //buscamos las cl
 	})
 })
 
+router.get("/coaching/proxima/usuario=:id", (req, res) => { //buscamos la siguiente clase del jugador
+
+	const id = req.params.id
+
+	const sqlSelect = "SELECT coaching.*, usuarios.nombre FROM `coaching` INNER JOIN usuarios ON coaching.id_coach = usuarios.id_usuario WHERE coaching.id_usuario = 2 AND fecha >= CURDATE() ORDER BY fecha ASC, hora ASC LIMIT 1"
+	db.query(sqlSelect, [id], (err, result) => {
+		if (err) {
+			res.send(sqlSelect + " error: " + err)
+		} else {
+			res.send(result)
+		}
+	})
+})
+
 router.get("/coaching/completadas/usuario=:id", (req, res) => { //buscamos las clases completadas de un jugador
 
 	const id = req.params.id
