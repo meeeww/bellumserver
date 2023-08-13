@@ -345,7 +345,7 @@ router.get("/coaching/completadas/usuario=:id", (req, res) => { //buscamos las c
 
 	const id = req.params.id
 
-	const sqlSelect = "SELECT coaching.*, usuarios.nombre FROM `coaching` INNER JOIN usuarios ON coaching.id_coach = usuarios.id_usuario WHERE coaching.id_usuario = 2 AND fecha < CURDATE() AND hora < CURRENT_TIME() ORDER BY fecha DESC"
+	const sqlSelect = "SELECT coaching.*, usuarios.nombre FROM `coaching` INNER JOIN usuarios ON coaching.id_coach = usuarios.id_usuario WHERE coaching.id_usuario = 2 AND fecha < CURDATE() AND hora < CURRENT_TIME() ORDER BY fecha DESC, hora ASC"
 	db.query(sqlSelect, [id], (err, result) => {
 		if (err) {
 			res.send(sqlSelect + " error: " + err)
