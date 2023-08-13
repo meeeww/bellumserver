@@ -374,6 +374,22 @@ router.post("/coaching/crear", (req, res) => {
 	})
 })
 
+router.put("/coaching/ping", (req, res) => {
+	const idClase = req.body.idClase
+
+	const sqlUpdate = "UPDATE `coaching` SET `ping` = '1' WHERE `coaching`.`id_sesion` = ?"
+
+	db.query(sqlUpdate, [idClase], (err, result) => {
+		if (!err) {
+			res.status(200)
+			res.end("Successfully updated - 200")
+		} else {
+			res.status(401)
+			res.end(err)
+		}
+	})
+})
+
 //!funciones que se ejecutan automaticamente
 
 router.post("/actualizarrango", (req, res) => {
