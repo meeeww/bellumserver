@@ -1,20 +1,30 @@
 {
-  "name": "serverapi",
-  "version": "1.0.1",
-  "main": "index.js",
+  "name": "bellum-secure-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "netlify deploy --prod"
+    "start": "nodemon --env-file .env server.js"
   },
+  "keywords": [],
   "author": "Zas",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
+    "axios": "^1.6.6",
+    "body-parser": "^1.20.2",
+    "cloudinary": "^1.41.3",
     "cors": "^2.8.5",
+    "discord-webhook-node": "^1.1.8",
     "express": "^4.18.2",
+    "express-rate-limit": "^7.1.5",
+    "jsonwebtoken": "^9.0.2",
+    "md5": "^2.3.0",
+    "multer": "1.4.5-lts.1",
     "mysql": "^2.18.1",
-    "netlify-cli": "^15.4.0",
-    "netlify-lambda": "^2.0.16",
-    "serverless-http": "^3.2.0"
-  },
-  "description": ""
+    "nodemailer": "^6.9.8",
+    "nodemon": "^3.0.3",
+    "serverless-http": "^3.2.0",
+    "swagger-ui-express": "^5.0.0"
+  }
 }
