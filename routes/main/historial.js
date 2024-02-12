@@ -168,7 +168,7 @@ router.get("/equipo/id=:id", [auth, viewer], (req, res) => {
  */
 router.get("/cuentas/id=:id", [auth, viewer], (req, res) => {
   const { id } = req.params;
-  returnQuery("SELECT * FROM `cuentas_lol` LEFT JOIN usuarios ON cuentas_lol.id_usuario = usuarios.id_usuario WHERE usuarios.id_usuario = ?", res, [id]);
+  returnQuery("SELECT * FROM `cuentas` LEFT JOIN usuarios ON cuentas.id_usuario = usuarios.id_usuario WHERE usuarios.id_usuario = ?", res, [id]);
 });
 
 
@@ -275,7 +275,7 @@ router.delete("/", [auth, admin], async (req, res) => {
   try {
     returnQuery("DELETE FROM logs WHERE id_usuario = ?", res, [id], false); // eliminar logs
     returnQuery("DELETE FROM sesiones WHERE id_usuario = ?", res, [id], false); // eliminar sesiones
-    returnQuery("DELETE FROM cuentas_lol WHERE id_usuario = ?", res, [id], false); // eliminar cuentas
+    returnQuery("DELETE FROM cuentas WHERE id_usuario = ?", res, [id], false); // eliminar cuentas
     returnQuery("DELETE FROM usuarios WHERE id_usuario = ?", res, [id], false); // eliminar usuario
 
     res.send({ status: 200, success: true });

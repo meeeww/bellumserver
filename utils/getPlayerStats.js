@@ -12,14 +12,14 @@ async function getPlayerStats(res, resultInfo) {
       riotParticipantList = response.data["info"]["participants"]; //Lista de participantes
       //recogemos el id_usuario a partir del puuid de la cuenta
       response.data["metadata"]["participants"].forEach((puuidUsuario, index) => {
-        let sqlSelect = "SELECT id_usuario FROM cuentas_lol WHERE puuid_lol = ?";
+        let sqlSelect = "SELECT id_usuario FROM cuentas WHERE puuid_lol = ?";
 
         db.query(sqlSelect, [puuidUsuario], (err, result) => {
           if (err) {
             res.send({ status: 500, success: false, reason: "Problema con la base de datos.", error: err });
           } else {
             if (result.length > 0) {
-              // Si existe el usuario en la tabla cuentas_lol
+              // Si existe el usuario en la tabla cuentas
 
               let id_usuario = result[0]["id_usuario"]; //id_usuario
               let asesinatos = riotParticipantList[index]["kills"]; //asesinatos

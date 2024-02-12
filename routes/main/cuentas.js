@@ -20,7 +20,7 @@ const RIOT_API = process.env.RIOT_API;
  * @returns {object} Todas las cuentas de LoL de todos los usuarios.
  */
 router.get("/", [auth, viewer], (req, res) => {
-    const sqlSelect = "SELECT id_cuenta, invocador, puuid_lol FROM cuentas_lol";
+    const sqlSelect = "SELECT id_cuenta, invocador, puuid_lol FROM cuentas";
     db.query(sqlSelect, (err, result) => {
         if (err) {
             res.send({ status: 500, success: false, reason: "Problema con la base de datos.", error: err });
@@ -45,7 +45,7 @@ router.get("/nombre=:nombre&tag=:tag", [auth, viewer], (req, res) => {
 
     axios
         .get(`https://europe.api.riotgames.com/riot/account/v1/accounts/by-riot-id/${nombre}/${tag}?api_key=${RIOT_API}`).then((cuentaRiot) => {
-            const sqlSelect = "SELECT invocador, tag, puuid_lol FROM cuentas_lol WHERE invocador = ? AND tag = ?";
+            const sqlSelect = "SELECT invocador, tag, puuid_lol FROM cuentas WHERE invocador = ? AND tag = ?";
             
             if (!cuentaRiot.data.puuid) return res.send({ status: 404, success: false, reason: "La cuenta no existe.", existe: false });
             
@@ -108,7 +108,7 @@ router.get("/puuid=:puuid", [auth, viewer], (req, res) => {
 router.post("/", [auth, self], async (req, res) => {
     const { id_usuario, invocador, tag, puuid, linea_principal, linea_secundaria } = req.body;
 
-    const sql = "INSERT INTO `cuentas_lol` (`id_cuenta`, `id_usuario`, `id_juego`, `invocador`, `tag`, `puuid_lol`, `linea_principal`, `linea_secundaria`) VALUES (NULL, ?, 1, ?, ?, ?, ?, ?)";
+    const sql = "INSERT INTO `cuentas` (`id_cuenta`, `id_usuario`, `id_juego`, `invocador`, `tag`, `puuid_lol`, `linea_principal`, `linea_secundaria`) VALUES (NULL, ?, 1, ?, ?, ?, ?, ?)";
     db.query(sql, [id_usuario, invocador, tag, puuid, linea_principal, linea_secundaria], (err, result) => {
         if (err) {
             res.send({ status: 500, success: false, reason: "Problema con la base de datos.", error: err });
@@ -135,7 +135,7 @@ router.post("/", [auth, self], async (req, res) => {
 router.put("/", [auth, self], async (req, res) => {
     const { id, invocador, tag, puuid_lol, linea_principal, linea_secundaria } = req.body;
 
-    const sql = "UPDATE cuentas_lol SET invocador = ?, puuid_lol = ?, linea_principal = ?, linea_secundaria = ?, tag = ? WHERE id_cuenta = ?";
+    const sql = "UPDATE cuentas SET invocador = ?, puuid_lol = ?, linea_principal = ?, linea_secundaria = ?, tag = ? WHERE id_cuenta = ?";
     db.query(sql, [invocador, puuid_lol, linea_principal, linea_secundaria, tag, id], (err, result) => {
         if (err) {
             res.send({ status: 500, success: false, reason: "Problema con la base de datos.", error: err });
@@ -157,7 +157,7 @@ router.put("/", [auth, self], async (req, res) => {
 router.delete("/", [auth, self], async (req, res) => {
     const { id_cuenta } = req.body;
 
-    const sqlDelete = "DELETE FROM cuentas_lol WHERE id_cuenta = ?";
+    const sqlDelete = "DELETE FROM cuentas WHERE id_cuenta = ?";
     db.query(sqlDelete, [id_cuenta], (err, result) => {
         if (err) {
             res.send({ status: 500, success: false, reason: "Problema con la base de datos.", error: err });

@@ -254,7 +254,7 @@ router.delete("/", [auth, admin], async (req, res) => {
 
   const sqlDeleteLogs = "DELETE FROM logs WHERE id_usuario = ?";
   const sqlDeleteSesiones = "DELETE FROM sesiones WHERE id_usuario = ?";
-  const sqlDeleteCuentas = "DELETE FROM cuentas_lol WHERE id_usuario = ?";
+  const sqlDeleteCuentas = "DELETE FROM cuentas WHERE id_usuario = ?";
   const sqlDeleteUsuario = "DELETE FROM usuarios WHERE id_usuario = ?";
 
   try {

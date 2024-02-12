@@ -4,7 +4,7 @@ const { returnQuery } = require("./returnQuery");
 async function returnPlayerList(res) {
     try {
         let usuarios = await returnQuery("SELECT id_usuario, id_equipo, nombre_usuario, apellido_usuario, nick_usuario, icono, circuitotormenta, twitter, discord FROM usuarios WHERE rol = 1 AND nombre_usuario != 'NECESITA MODIFICACIÓN' AND apellido_usuario != 'NECESITA MODIFICACIÓN'", res, [], false);
-        let cuentas = await returnQuery("SELECT * FROM cuentas_lol", res, [], false);
+        let cuentas = await returnQuery("SELECT * FROM cuentas", res, [], false);
         let equipos = await returnQuery("SELECT * FROM equipos", res, [], false);
         let estadisticas = await returnQuery("SELECT * FROM estadisticas_usuarios", res, [], false);
 
@@ -31,7 +31,7 @@ async function returnPlayer(id, res) {
         let usuario = { info: {}, equipo: {}, cuentas: {}, estadisticas: {} };
 
         usuario.info = (await returnQuery("SELECT id_usuario, id_equipo, id_discord, nombre_usuario, apellido_usuario, nick_usuario, edad, rol, icono, usuario_activado, circuitotormenta, twitter, discord FROM usuarios WHERE id_usuario = ?", res, [id], false))[0];
-        usuario.cuentas = await returnQuery("SELECT * FROM cuentas_lol WHERE id_usuario = ?", res, [id], false);
+        usuario.cuentas = await returnQuery("SELECT * FROM cuentas WHERE id_usuario = ?", res, [id], false);
 
         if (usuario.info["id_equipo"]) {
             usuario.equipo = (await returnQuery("SELECT * FROM equipos WHERE id_equipo = ?", res, usuario.info["id_equipo"], false))[0];
