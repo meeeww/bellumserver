@@ -131,12 +131,12 @@ router.get("/nombre=:nombre", (req, res) => {
  */
 router.get("/nombre=:nombre/contra=:contra", async (req, res) => {
   const { nombre, contra } = req.params;
-  await returnQuery("SELECT nick_usuario, contra FROM usuarios WHERE nick_usuario = ?", res, [nombre], false)
+  await returnQuery("SELECT nombre, contra FROM usuarios WHERE nombre = ?", res, [nombre], false)
     .then((result) => {
       if (result.length === 0) return res.send({ status: 404, success: false, reason: "El usuario no existe." });
 
       if (result[0]["contra"] == contra) {
-        res.send({ status: 200, success: true, result: result[0]["nick_usuario"] });
+        res.send({ status: 200, success: true, result: result[0]["nombre"] });
       } else {
         res.send({ status: 401, success: false, reason: "Credenciales erróneas." });
       }

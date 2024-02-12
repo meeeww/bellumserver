@@ -18,8 +18,8 @@ const router = express.Router();
 router.post("/", async (req, res) => {
     const sqlComprobar = "SELECT id_usuario, token, expire FROM sesiones WHERE id_usuario = ?";
 
-    const sqlSelect = "SELECT id_usuario, rol, contra FROM usuarios WHERE nick_usuario = ?";
-    const sqlInsertToken = "INSERT INTO sesiones (id_usuario, fecha, token, expire) VALUES (?, ?, ?, ?)";
+    const sqlSelect = "SELECT id_usuario, nombre, contra, permisos, discord, icono FROM usuarios WHERE nombre = ?";
+    const sqlInsertToken = "INSERT INTO sesiones (id_usuario, primera_sesion, expire, token) VALUES (?, ?, ?, ?)";
     const sqlDeleteToken = "DELETE FROM sesiones WHERE id_usuario = ?";
     if (req.body.type == "inicio") {
         if (!req.body.token) {
@@ -32,10 +32,10 @@ router.post("/", async (req, res) => {
     } else if (req.body.type == "buscar"){
         returnUser(req.body.token, res)
     } else if (req.body.type == "main") {
-        db.query(sqlSelect, [req.body.nick], (err, result) => {
+        db.query(sqlSelect, [req.body.nombre], (err, result) => {
             if (err) {
                 res.send({ status: 500, success: false, reason: "Problema con la base de datos.", error: err });
-            } else if (!req.body.nick || !req.body.contra) {
+            } else if (!req.body.nombre || !req.body.contra) {
                 res.send({ status: 401, success: false, reason: "No se han enviado datos suficientes." });
             } else {
                 // comprobamos que el usuario existe en la bbdd
@@ -59,8 +59,8 @@ router.post("/", async (req, res) => {
                             } else {
                                 if (result3.length == 0) {
                                     // si no existe la sesion en la base de datos
-                                    const token = jwt.sign({ id: user["id_usuario"], rol: user["rol"] }, "jwtPrivateKey"); //creamos la token
-                                    db.query(sqlInsertToken, [user["id_usuario"], Math.floor(new Date().getTime() / 1000.0), token, fecha], (err2, result2) => {
+                                    const token = jwt.sign({ id: user["id_usuario"], permisos: user["permisos"] }, "jwtPrivateKey"); //creamos la token
+                                    db.query(sqlInsertToken, [user["id_usuario"], Math.floor(new Date().getTime() / 1000.0), fecha, token], (err2, result2) => {
                                         if (err2) {
                                             res.send({ status: 500, sucess: false, reason: "Problema de base de datos.", error: err2 });
                                         } else {
@@ -76,7 +76,7 @@ router.post("/", async (req, res) => {
                                         res.send({ status: 200, success: true, reason: "El token ya existe.", token: result3[0]["token"] });
                                     } else {
                                         //si esta expirado, creamos uno nuevo borrando el anterior
-                                        const token = jwt.sign({ id: user["id_usuario"], rol: user["rol"] }, "jwtPrivateKey");
+                                        const token = jwt.sign({ id: user["id_usuario"], permisos: user["permisos"] }, "jwtPrivateKey");
                                         db.query(sqlDeleteToken, [user["id_usuario"]], (err4, result4) => {
                                             if (err4) {
                                                 res.send({ status: 500, sucess: false, reason: "Problema de base de datos.", error: err4 });
@@ -85,7 +85,7 @@ router.post("/", async (req, res) => {
                                                     res.send({ status: 500, sucess: false, reason: "Problema de base de datos.", error: err4 });
                                                 db.query(
                                                     sqlInsertToken,
-                                                    [user["id_usuario"], Math.floor(new Date().getTime() / 1000.0), token, fecha],
+                                                    [user["id_usuario"], Math.floor(new Date().getTime() / 1000.0), fecha, token],
                                                     (err5, result5) => {
                                                         if (err5) {
                                                             res.send({ status: 500, sucess: false, reason: "Problema de base de datos.", error: err5 });
