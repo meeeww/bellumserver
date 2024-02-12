@@ -43,16 +43,9 @@ app.disable('x-powered-by'); // deshabilitar header X-Powered-By por seguridad
 const routes = [
     { path: "/auth", router: require("./routes/auth") },
     { path: "/usuarios", router: require("./routes/main/usuarios") },
-    { path: "/temporadas", router: require("./routes/main/temporadas") },
     { path: "/riot", router: require("./routes/main/riot") },
-    { path: "/partidos", router: require("./routes/main/partidos") },
     { path: "/misc", router: require("./routes/main/misc") },
-    { path: "/ligas", router: require("./routes/main/ligas") },
-    { path: "/equipos", router: require("./routes/main/equipos") },
     { path: "/cuentas", router: require("./routes/main/cuentas") },
-
-    //v2
-    { path: "/v2/partidos", router: require("./routes/v2/partidos") },
 ];
 
 routes.forEach(route => {
