@@ -7,18 +7,23 @@ const forbidden = ((res) => {
 })
 
 function admin(req, res, next) {
-    if (req.user.rol < 20) return forbidden(res);
+    if (req.user.permisos < 3) return forbidden(res);
+    next();
+}
+
+function coach(req, res, next) {
+    if (req.user.permisos < 2) return forbidden(res);
     next();
 }
 
 function viewer(req, res, next) {
-    if (!req.user.rol && req.user.rol != 0) return forbidden(res);
+    if (!req.user.permisos && req.user.permisos != 0) return forbidden(res);
     next();
 }
 
 function self(req, res, next) {
-    if (req.body.id_usuario != req.user.id && req.user.rol < 20) return forbidden(res);
+    if (req.body.id_usuario != req.user.id) return forbidden(res);
     next();
 }
 
-module.exports = { admin, viewer, self };
+module.exports = { admin, coach, viewer, self };
